@@ -1,0 +1,210 @@
+287.053Q per minute
+855.716b per hour
+855.716b eggs per hour
+1.736T ship per hour
+220.22n per minute
+2.57q per hour
+6.467q eggs per hour
+2.57q ship per hour
+2.57q laying with 30TE
+
+6.114s per minute
+2.2T per hour
+2.2T eggs per hour
+5.444T ship per hour
+2.594d per minute
+3.538q per hour
+6.898q eggs per hour
+3.538q ship per hour
+3.538q laying with 31TE
+
+12.422s per minute
+3.423T per hour
+3.423T eggs per hour
+8.587T ship per hour
+4.017d per minute
+4.154q per hour
+7.475q eggs per hour
+4.154q ship per hour
+4.154q laying with 32TE
+
+67.603s per minute
+6.846T per hour
+6.846T eggs per hour
+13.907T ship per hour
+54.815d per minute
+7.256q per hour
+9.001q eggs per hour
+7.256q ship per hour
+7.256q laying with 33TE
+
+134.77s per minute
+11.002T per hour
+11.002T eggs per hour
+18.811T ship per hour
+101.531d per minute
+8.312q per hour
+10.157q eggs per hour
+8.312q ship per hour
+8.312q laying with 34TE
+
+225.323s per minute
+15.281T per hour
+15.281T eggs per hour
+31.907T ship per hour
+173.814d per minute
+10.648q per hour
+11.381q eggs per hour
+10.648q ship per hour
+10.648q laying with 35TE
+
+881.854s per minute
+23.532T per hour
+23.532T eggs per hour
+58.605T ship per hour
+609.968d per minute
+12.855q per hour
+12.855q eggs per hour
+15.132q ship per hour
+12.855q laying with 36TE
+
+48.615S per minute
+49.509T per hour
+49.509T eggs per hour
+147.19T ship per hour
+188.666U per minute
+19.978q per hour
+19.978q eggs per hour
+32.081q ship per hour
+19.978q laying with 37TE
+
+365.565S per minute
+83.616T per hour
+83.616T eggs per hour
+189.878T ship per hour
+917.289U per minute
+25.876q per hour
+25.876q eggs per hour
+47.196q ship per hour
+25.876q laying with 38TE
+
+570.768S per minute
+89.483T per hour
+89.483T eggs per hour
+217.507T ship per hour
+1.477D per minute
+29.274q per hour
+29.274q eggs per hour
+52.861q ship per hour
+29.274q laying with 39TE
+
+4.303o per minute
+221.142T per hour
+221.142T eggs per hour
+253.23T ship per hour
+421.656D per minute
+51.824q per hour
+51.824q eggs per hour
+89.117q ship per hour
+51.824q laying with 40TE
+
+6.534o per minute
+265.892T per hour
+364.535T eggs per hour
+265.892T ship per hour
+674.839D per minute
+59.595q per hour
+59.595q eggs per hour
+116.689q ship per hour
+59.595q laying with 41TE
+
+50.722o per minute
+335.756T per hour
+660.124T eggs per hour
+335.756T ship per hour
+2.701Td per minute
+73.287q per hour
+73.287q eggs per hour
+153.927q ship per hour
+73.287q laying with 42TE
+
+101.341o per minute
+351.018T per hour
+660.124T eggs per hour
+351.018T ship per hour
+3.821Td per minute
+73.287q per hour
+73.287q eggs per hour
+170.699q ship per hour
+73.287q laying with 43TE
+
+446.353o per minute
+406.978T per hour
+660.124T eggs per hour
+406.978T ship per hour
+146.25Td per minute
+86.22q per hour
+86.22q eggs per hour
+256.97q ship per hour
+86.22q laying with 44TE
+
+638.591o per minute
+423.257T per hour
+660.124T eggs per hour
+423.257T ship per hour
+182.431Td per minute
+86.22q per hour
+86.22q eggs per hour
+274.591q ship per hour
+86.22q laying with 45TE
+
+1.993n per minute
+484.303T per hour
+660.124T eggs per hour
+484.303T ship per hour
+434.181Td per minute
+86.22q per hour
+86.22q eggs per hour
+301.908q ship per hour
+86.22q laying with 46TE
+
+2.564n per minute
+501.6T per hour
+660.124T eggs per hour
+501.6T ship per hour
+5.012qd per minute
+86.22q per hour
+86.22q eggs per hour
+307.605q ship per hour
+86.22q laying with 47TE
+
+3.251n per minute
+518.896T per hour
+660.124T eggs per hour
+518.896T ship per hour
+5.772qd per minute
+86.22q per hour
+86.22q eggs per hour
+313.301q ship per hour
+86.22q laying with 48TE
+
+8.803n per minute
+553.489T per hour
+726.136T eggs per hour
+553.489T ship per hour
+14.233qd per minute
+90.531q per hour
+90.531q eggs per hour
+324.694q ship per hour
+90.531q laying with 49TE
+
+19.04n per minute
+753.438T per hour
+765.744T eggs per hour
+753.438T ship per hour
+17.799qd per minute
+93.118q per hour
+93.118q eggs per hour
+379.582q ship per hour
+93.118q laying with 50TE
+

@@ -4,28 +4,28 @@ import copy
 from research_values import grab_research
 
 # a_multi = float(input("Artifact Multiplier: "))
-a_multi = 85041
+a_multi = 179
 # cube = float(input("Research discount (T4C = 50): "))
-cube = 60
-# rounds = int(input("# of building rounds? "))
-rounds = 2
-
-# mx_off = [2400, 28800]
-# mxh_off = [172800, 345600]
-# mxv_off = [43200, 86400]
-
-# for k in range(rounds):
-#     mx_off.append(int(input("Max offline (in seconds) for 1 research (3600 recommended) round "+str(k)+":")))
-#     mxh_off.append(int(input("Max offline (in seconds) for 1 hab/vehicle (86400 recommended) round "+str(k)+":")))
-#     mxv_off.append(int(input("Max offline (in seconds) for 1 vehicle (86400 recommended) round "+str(k)+":")))
-
+cube = 15
+# mx_off = int(input("Max offline (in seconds) for 1 research (3600 recommended): "))
+mx_off = 600
+# mxh_off = int(input("Max offline (in seconds) for 1 hab/vehicle (86400 recommended): "))
+mxh_off = 21600
+# mxv_off = int(input("Max offline (in seconds) for 1 vehicle (86400 recommended): "))
+mxv_off = 1800
+# mx_off2 = int(input("Max offline (in seconds) for 1 research (3600 recommended) 2: "))
+mx_off2 = 1800
+# mxh_off2 = int(input("Max offline (in seconds) for 1 hab/vehicle (86400 recommended) 2: "))
+mxh_off2 = 43200
+# mxv_off2 = int(input("Max offline (in seconds) for 1 vehicle (86400 recommended) 2: "))
+mxv_off2 = 10800
 c_multi = 6
 te_multii = int(input("# of TE: "))
 te_max = int(input("Until: "))
 
 start = te_multii
 stop = te_max
-step = int(input("step "))
+step = 1
 
 class Farm:
     def __init__(self,multi,elr,ship,upgrades):
@@ -130,16 +130,18 @@ class Farm:
         ship += hyperloop*self.cars*50000000
         return ship * 2.5/60 * 1.1025
     
-name = str(te_multii)+" - "+str(te_max)+' - '+str(int(a_multi))+" new"+'.txt'
+name = str(te_multii)+" - "+str(te_max)+' - '+str(int(a_multi))+'.txt'
     
 with open(name, "w") as f:
     f.write("Artifact Multiplier: "+str(a_multi)+'\n')
     f.write("Research discount (T4C = 50): "+str(cube)+'\n')
-    # for l in range(rounds):
-    #     f.write("Max offline (in seconds) for 1 research round "+str(l+1)+": "+str(mx_off[l])+'\n')
-    #     f.write("Max offline (in seconds) for 1 hab round "+str(l+1)+": "+str(mxh_off[l])+'\n')
-    #     f.write("Max offline (in seconds) for 1 vehicle round "+str(l+1)+": "+str(mxv_off[l])+'\n')
-    # f.write("Offline Colleggtible Multiplier: "+str(c_multi)+'\n')
+    f.write("Max offline (in seconds) for 1 research: "+str(mx_off)+'\n')
+    f.write("Max offline (in seconds) for 1 hab: "+str(mxh_off)+'\n')
+    f.write("Max offline (in seconds) for 1 vehicle: "+str(mxv_off)+'\n')
+    f.write("Max offline (in seconds) for 1 research 2: "+str(mx_off2)+'\n')
+    f.write("Max offline (in seconds) for 1 hab 2: "+str(mxh_off2)+'\n')
+    f.write("Max offline (in seconds) for 1 vehicle 2: "+str(mxv_off2)+'\n')
+    f.write("Offline Colleggtible Multiplier: "+str(c_multi)+'\n')
     f.write("# of TE: "+str(te_multii)+'\n')
     f.write("Until "+str(te_max)+" TE"+'\n\n')
     for i in range(start, stop + 1, step):
@@ -172,30 +174,32 @@ with open(name, "w") as f:
             ship_multi = math.prod(farm.ship) * farm.trueShip()
             return cash_multi * min(elr_multi, ship_multi) * 1.05 * 2
 
-        def research_sim(remaining_seconds):
-            """Consume from remaining_seconds while purchasing researches. Returns remaining_seconds."""
+        def research_sim(mx):
             seconds = 0
             # fast-forward to the next research purchase instead of iterating every second
-            while remaining_seconds > 0 and ar_costs:
+            while mx > seconds and ar_costs:
                 income = calc_cash()
-                # cannot accumulate income -> stop
+                # cannot accumulate income -> break
                 if income <= 0:
                     break
                 try:
                     next_cost = ar_costs[0] * 1/cube
                 except IndexError:
                     break
-                # time needed to afford next research
+                # if we can't reach next cost within remaining time, advance to the end
+                if farm.cash + income * (mx - seconds) < next_cost:
+                    farm.cash += income * (mx - seconds)
+                    seconds = mx
+                    break
+                # jump forward to when we can afford the next research
                 needed = max(0.0, next_cost - farm.cash)
                 delta = max(1, math.ceil(needed / income))
-                # if we don't have enough remaining_seconds to wait the delta, consume all and exit
-                if delta > remaining_seconds:
-                    farm.cash = 0
-                    remaining_seconds = 0
+                if seconds + delta > mx:
+                    farm.cash += income * (mx - seconds)
+                    seconds = mx
                     break
-                # advance time by delta and buy
                 farm.cash += income * delta
-                remaining_seconds -= delta
+                seconds += delta
                 # buy as many researches as affordable
                 while ar_costs and farm.cash > ar_costs[0] * 1/cube:
                     farm.cash -= ar_costs[0] * 1/cube
@@ -267,9 +271,9 @@ with open(name, "w") as f:
                         case "hp_costs": farm.updateShip(9,0.05),farm.updateUpgrades(54,1)
                         case "ro_costs": farm.updateELR(11,0.1),farm.updateUpgrades(55,1)
                     ar_costs.pop(0)
-                    # after a purchase, continue buying if affordable; time remains at 0 between immediate buys
-            return remaining_seconds
-        def house_sim(remaining_seconds):
+                    seconds = 0
+            farm.cash = 0
+        def house_sim(mxh):
             house = [6.92, 197.00, 467.00, 816.00, 4134.00, 6649.00, 10016.00, 14425.00, 61076.00, 127276.00, 238583.00,
                     415193.00,
                     1377000.00, 2627000.00, 4637000.00, 7704000.00, 26944000.00, 54319000.00, 100061000.00, 172278000.00,
@@ -292,31 +296,37 @@ with open(name, "w") as f:
                     85225000000000000000000000000.00,
                     19692000000000000000000000000000.00, 146005000000000000000000000000000.00,
                     592272000000000000000000000000000.00, 1740000000000000000000000000000000.00]
+            seconds = 0
             farm.popInit()
-            # fast-forward to next house purchase using remaining_seconds
-            while remaining_seconds > 0 and house:
+            # fast-forward to next house purchase
+            while mxh > seconds and house:
                 income = calc_cash()
                 if income <= 0:
                     break
                 next_cost = house[0]
+                if farm.cash + income * (mxh - seconds) < next_cost:
+                    farm.cash += income * (mxh - seconds)
+                    seconds = mxh
+                    break
                 needed = max(0.0, next_cost - farm.cash)
                 delta = max(1, math.ceil(needed / income))
-                if delta > remaining_seconds:
-                    farm.cash = 0
-                    remaining_seconds = 0
+                if seconds + delta > mxh:
+                    farm.cash += income * (mxh - seconds)
+                    seconds = mxh
                     break
                 farm.cash += income * delta
-                remaining_seconds -= delta
+                seconds += delta
                 try:
                     while house and farm.cash > house[0]:
                         farm.cash -= house[0]
                         farm.popUpdate()
                         house.pop(0)
-                        # immediate buys don't consume extra time
+                        seconds = 0
                 except IndexError:
-                    return remaining_seconds
-            return remaining_seconds
-        def vehicle_sim(remaining_seconds):
+                    return
+            farm.cash = 0
+            return
+        def vehicle_sim(mxv):
             local_vehicle = copy.deepcopy(vehicles)
             seconds = 0
             buy_list = []
@@ -329,20 +339,24 @@ with open(name, "w") as f:
                 buy_list.pop(0)
             farm.vehicleInit()
             ve_list = ""
-            # fast-forward to next vehicle purchase using remaining_seconds
-            while remaining_seconds > 0 and buy_list:
+            # fast-forward to next vehicle purchase
+            while mxv > seconds and buy_list:
                 income = calc_cash()
                 if income <= 0:
                     break
                 next_cost = buy_list[0]
+                if farm.cash + income * (mxv - seconds) < next_cost:
+                    farm.cash += income * (mxv - seconds)
+                    seconds = mxv
+                    break
                 needed = max(0.0, next_cost - farm.cash)
                 delta = max(1, math.ceil(needed / income))
-                if delta > remaining_seconds:
-                    farm.cash = 0
-                    remaining_seconds = 0
+                if seconds + delta > mxv:
+                    farm.cash += income * (mxv - seconds)
+                    seconds = mxv
                     break
                 farm.cash += income * delta
-                remaining_seconds -= delta
+                seconds += delta
                 try:
                     while buy_list and farm.cash > buy_list[0]:
                         farm.cash -= buy_list[0]
@@ -372,15 +386,15 @@ with open(name, "w") as f:
                             case "Cars": ve_num = 13
                         farm.vehicleUpdate(ve_num,shipping)
                         buy_list.pop(0)
+                        seconds = 0
                 except IndexError:
-                    return remaining_seconds
-            return remaining_seconds
-        def loop(total_seconds_budget):
-            """Run research, house, and vehicle sims consuming from total_seconds_budget and return the capacity string from final state."""
-            remaining = total_seconds_budget
-            research_sim(remaining)
-            house_sim(remaining)
-            vehicle_sim(remaining)
+                    return
+            farm.cash = 0
+            return
+        def loop(mx, mxh, mxv):
+            research_sim(mx)
+            house_sim(mxh)
+            vehicle_sim(mxv)
             cpm = calc_cash()
             cpm = int(cpm) * 60
 
@@ -455,39 +469,10 @@ with open(name, "w") as f:
             f.write(ship_multi + " ship per hour"+'\n')
             farm.printTier(f)
 
-            return elr_multi, ship_multi
+            return eff_ship
 
         f.write("                           "+str(i)+" TE"+'\n')
         f.write("----------------------------------------------------------------------"+'\n\n')
-
-        # total seconds budget for purchases (uncapped per-purchase but capped overall)
-        total_seconds_budget = 1210000
-        for j in range(rounds-1):
-            # run each preliminary round consuming from the same total budget
-            loop(total_seconds_budget)
-
-        elr, ship = loop(total_seconds_budget)
-        ship *= 1.5
-        elr *= 1.35
-
-        stones = []
-
-        while len(stones) <= 12:
-            if ship > elr:
-                stones.append("tach")
-                elr *= 1.05
-            elif ship < elr:
-                stones.append("quant")
-                ship *= 1.05
-            elif ship == elr and len(stones) <= 10:
-                stones.append("tach")
-                stones.append("quant")
-                elr *= 1.05
-                ship *= 1.05
-            else:
-                stones.append("quant")
-                ship *= 1.05
-
-        cap = min(ship, elr)
-
-        f.write("chatgpt look at this number: "+str(cap)+" per hour"+'\n\n')
+        loop(mx_off, mxh_off, mxv_off)
+        cap = loop(mx_off2, mxh_off2, mxv_off2)
+        f.write(str(cap)+" per hour"+'\n\n')

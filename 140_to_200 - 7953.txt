@@ -1,7 +1,0 @@
-1.002q laying with 140TE
-1.064q laying with 150TE
-1.264q laying with 160TE
-1.34q laying with 170TE
-1.394q laying with 180TE
-1.45q laying with 190TE
-1.506q laying with 200TE
