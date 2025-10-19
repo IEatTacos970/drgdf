@@ -1,5 +1,6 @@
 import math
 import copy
+from collections import Counter
 
 from research_values import grab_research
 
@@ -8,7 +9,7 @@ a_multi = 85041
 # cube = float(input("Research discount (T4C = 50): "))
 cube = 60
 # rounds = int(input("# of building rounds? "))
-rounds = 2
+rounds = 3
 
 # mx_off = [2400, 28800]
 # mxh_off = [172800, 345600]
@@ -130,7 +131,7 @@ class Farm:
         ship += hyperloop*self.cars*50000000
         return ship * 2.5/60 * 1.1025
     
-name = str(te_multii)+" - "+str(te_max)+' - '+str(int(a_multi))+" new"+'.txt'
+name = str(te_multii)+" - "+str(te_max)+' - '+str(step)+str(int(a_multi))+" new"+'.txt'
     
 with open(name, "w") as f:
     f.write("Artifact Multiplier: "+str(a_multi)+'\n')
@@ -387,13 +388,13 @@ with open(name, "w") as f:
             max_pop = farm.pop * farm.elr[3] * farm.elr[5] * farm.elr[8] * farm.elr[10]
 
             cash_multi = math.prod(farm.multi) / (farm.multi[1] * farm.multi[2])
-            elr_multi = math.prod(farm.elr) * farm.pop * 3600
-            ship_multi = math.prod(farm.ship) * farm.trueShip() * 3600
-            eff_ship = min(elr_multi, ship_multi)
+            elr_multii = math.prod(farm.elr) * farm.pop * 3600
+            ship_multii = math.prod(farm.ship) * farm.trueShip() * 3600
+            eff_ship = min(elr_multii, ship_multii)
 
-            Pe = max_pop * min(1, (ship_multi / elr_multi))
+            Pe = max_pop * min(1, (ship_multii / elr_multii))
 
-            f_value = 30000 * 2 * cash_multi * (elr_multi / max_pop) * (farm.cr - 4) ** 0.25 * 6 * (
+            f_value = 30000 * 2 * cash_multi * (elr_multii / max_pop) * (farm.cr - 4) ** 0.25 * 6 * (
                         Pe + (0.2 * (max_pop - Pe)) + (farm.ihr * offline))
             d_value = f_value * 0.05
 
@@ -443,8 +444,8 @@ with open(name, "w") as f:
             d_value = oom_calc(d_value)
             cpm = oom_calc(cpm)
             eff_ship = oom_calc(eff_ship)
-            elr_multi = oom_calc(elr_multi)
-            ship_multi = oom_calc(ship_multi)
+            elr_multi = oom_calc(elr_multii)
+            ship_multi = oom_calc(ship_multii)
             f_value = oom_calc(f_value)
 
             # f.write("Farm Value: " + f_value + " (Hopefully right?)"+'\n')
@@ -455,13 +456,13 @@ with open(name, "w") as f:
             f.write(ship_multi + " ship per hour"+'\n')
             farm.printTier(f)
 
-            return elr_multi, ship_multi
+            return elr_multii, ship_multii
 
         f.write("                           "+str(i)+" TE"+'\n')
         f.write("----------------------------------------------------------------------"+'\n\n')
 
         # total seconds budget for purchases (uncapped per-purchase but capped overall)
-        total_seconds_budget = 1210000
+        total_seconds_budget = 610000
         for j in range(rounds-1):
             # run each preliminary round consuming from the same total budget
             loop(total_seconds_budget)
@@ -472,14 +473,14 @@ with open(name, "w") as f:
 
         stones = []
 
-        while len(stones) <= 12:
+        while len(stones) < 12:
             if ship > elr:
                 stones.append("tach")
                 elr *= 1.05
             elif ship < elr:
                 stones.append("quant")
                 ship *= 1.05
-            elif ship == elr and len(stones) <= 10:
+            elif ship == elr and len(stones) < 11:
                 stones.append("tach")
                 stones.append("quant")
                 elr *= 1.05
@@ -490,4 +491,52 @@ with open(name, "w") as f:
 
         cap = min(ship, elr)
 
-        f.write("chatgpt look at this number: "+str(cap)+" per hour"+'\n\n')
+        def oom_calc(val):
+                oom = round((len(f'{val:.0f}') - 2) / 3)
+                eb = "uhhhh"
+                match oom:
+                    case 1:
+                        eb = 'k'
+                    case 2:
+                        eb = 'm'
+                    case 3:
+                        eb = 'b'
+                    case 4:
+                        eb = 'T'
+                    case 5:
+                        eb = 'q'
+                    case 6:
+                        eb = 'Q'
+                    case 7:
+                        eb = 's'
+                    case 8:
+                        eb = 'S'
+                    case 9:
+                        eb = 'o'
+                    case 10:
+                        eb = 'n'
+                    case 11:
+                        eb = 'd'
+                    case 12:
+                        eb = 'U'
+                    case 13:
+                        eb = 'D'
+                    case 14:
+                        eb = 'Td'
+                    case 15:
+                        eb = 'qd'
+                    case 16:
+                        eb = 'Qd'
+                    case 17:
+                        eb = 'sd'
+                    case 18:
+                        eb = 'Sd'
+                temp = round(val / 10 ** (oom * 3), 3)
+                return str(temp) + eb
+        
+        stoneCounter = Counter(stones)
+        formatted = ', '.join(f"{key}: {value}" for key, value in stoneCounter.items())
+
+        f.write("chatgpt look at this number: "+str(oom_calc(cap))+" per hour"+'\n\n')
+        f.write(str(oom_calc(elr))+" laying, shipping: "+str(oom_calc(ship))+'\n')
+        f.write(formatted+'\n\n')

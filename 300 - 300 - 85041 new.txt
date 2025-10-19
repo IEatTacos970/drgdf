@@ -1,0 +1,53 @@
+Artifact Multiplier: 85041
+Research discount (T4C = 50): 60
+# of TE: 300
+Until 300 TE
+
+                           300 TE
+----------------------------------------------------------------------
+
+32.277qd per minute
+1.355q per hour
+1.355q eggs per hour
+1.705q ship per hour
+Tier 1: [50, 40, 15, 25]
+Tier 2: [8, 10, 30, 10, 1]
+Tier 3: [10, 30, 2, 25, 50]
+Tier 4: [1, 1, 50, 35, 10]
+Tier 5: [10, 40, 2, 15, 30]
+Tier 6: [2, 50, 30, 60]
+Tier 7: [2, 50, 5, 30]
+Tier 8: [20, 100, 250, 20]
+Tier 9: [25, 7, 25, 100]
+Tier 10: [5, 28, 50, 90]
+Tier 11: [24, 32, 1, 37]
+Tier 12: [9, 31, 2, 12]
+Tier 13: [0, 0, 0, 0]
+Houses: [19, 19, 19, 19]
+Vehicles: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
+Cars: 6
+
+1.902sd per minute
+3.961q per hour
+3.961q eggs per hour
+7.881q ship per hour
+Tier 1: [50, 40, 15, 25]
+Tier 2: [8, 10, 30, 10, 1]
+Tier 3: [10, 30, 2, 25, 50]
+Tier 4: [1, 1, 50, 35, 10]
+Tier 5: [10, 40, 2, 15, 30]
+Tier 6: [2, 50, 30, 60]
+Tier 7: [2, 50, 5, 30]
+Tier 8: [20, 100, 250, 20]
+Tier 9: [25, 7, 25, 100]
+Tier 10: [5, 30, 50, 150]
+Tier 11: [25, 50, 3, 50]
+Tier 12: [25, 100, 5, 25]
+Tier 13: [500, 1, 25, 10]
+Houses: [19, 19, 19, 19]
+Vehicles: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
+Cars: 9
+
+chatgpt look at this number: 10.083q per hour
+
+tach, tach, tach, tach, tach, tach, tach, tach, tach, tach, tach, tach, tach
