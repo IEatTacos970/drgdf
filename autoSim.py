@@ -52,12 +52,12 @@ import io
 timeTaken = 0
 
 c_multi = 6
-te_multii = int(input("# of TE: "))
-te_max = int(input("Until: "))
+# te_multii = int(input("# of TE: "))
+# te_max = int(input("Until: "))
 
-start = te_multii
-stop = te_max
-step = int(input("step "))
+# start = te_multii
+# stop = te_max
+# step = int(input("step "))
 
 class Farm:
     def __init__(self,multi,elr,ship,upgrades):
