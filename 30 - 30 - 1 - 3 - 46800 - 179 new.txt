@@ -1,0 +1,77 @@
+Artifact Multiplier: 179.0
+Research discount (T4C = 50): 15.0
+# of TE: 30
+Until 30 TE
+
+                           30 TE
+----------------------------------------------------------------------
+
+229.522Q per minute
+672.349b per hour
+672.349b eggs per hour
+1.919T ship per hour
+Tier 1: [50, 40, 15, 25]
+Tier 2: [8, 10, 30, 10, 1]
+Tier 3: [10, 30, 2, 25, 50]
+Tier 4: [1, 1, 50, 35, 10]
+Tier 5: [10, 40, 2, 15, 30]
+Tier 6: [2, 35, 30, 51]
+Tier 7: [1, 13, 1, 13]
+Tier 8: [0, 0, 0, 0]
+Tier 9: [0, 0, 0, 0]
+Tier 10: [0, 0, 0, 0]
+Tier 11: [0, 0, 0, 0]
+Tier 12: [0, 0, 0, 0]
+Tier 13: [0, 0, 0, 0]
+Houses: [14, 13, 13, 13]
+Vehicles: [10, 10, 10, 9, 9, 9, 9, 9, 10, 9, 9]
+Cars: 0
+
+59.342S per minute
+44.497T per hour
+44.497T eggs per hour
+52.093T ship per hour
+Tier 1: [50, 40, 15, 25]
+Tier 2: [8, 10, 30, 10, 1]
+Tier 3: [10, 30, 2, 25, 50]
+Tier 4: [1, 1, 50, 35, 10]
+Tier 5: [10, 40, 2, 15, 30]
+Tier 6: [2, 50, 30, 60]
+Tier 7: [2, 50, 5, 30]
+Tier 8: [16, 78, 197, 18]
+Tier 9: [12, 2, 2, 20]
+Tier 10: [0, 5, 0, 0]
+Tier 11: [0, 0, 0, 0]
+Tier 12: [0, 0, 0, 0]
+Tier 13: [0, 0, 0, 0]
+Houses: [18, 17, 17, 17]
+Vehicles: [12, 12, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11]
+Cars: 4
+
+882.586S per minute
+104.153T per hour
+104.153T eggs per hour
+159.535T ship per hour
+Tier 1: [50, 40, 15, 25]
+Tier 2: [8, 10, 30, 10, 1]
+Tier 3: [10, 30, 2, 25, 50]
+Tier 4: [1, 1, 50, 35, 10]
+Tier 5: [10, 40, 2, 15, 30]
+Tier 6: [2, 50, 30, 60]
+Tier 7: [2, 50, 5, 30]
+Tier 8: [20, 100, 250, 20]
+Tier 9: [22, 3, 21, 57]
+Tier 10: [2, 9, 0, 0]
+Tier 11: [0, 0, 0, 0]
+Tier 12: [0, 0, 0, 0]
+Tier 13: [0, 0, 0, 0]
+Houses: [18, 18, 18, 18]
+Vehicles: [12, 12, 12, 12, 12, 12, 12, 11, 11, 11, 11, 11, 11, 11]
+Cars: 4
+
+chatgpt look at this number: 104.153T per hour
+
+104.153T laying, shipping: 159.535T
+
+Time Taken: 23.0d 2.0h 36.0m
+

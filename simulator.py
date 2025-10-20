@@ -3,13 +3,42 @@ import copy
 from collections import Counter
 
 from research_values import grab_research
+import io
 
-# a_multi = float(input("Artifact Multiplier: "))
-a_multi = 85041
-# cube = float(input("Research discount (T4C = 50): "))
-cube = 60
-# rounds = int(input("# of building rounds? "))
-rounds = 3
+# Artifact multiplier
+a_multi = float(input("Artifact Multiplier: "))
+# a_multi = 85041
+cube = float(input("Research discount (T4C = 50): "))
+# cube = 60
+
+# Allow single value or ranges for rounds and maxTime. Examples:
+#  - single: "2"
+#  - dash range: "1-3" (inclusive)
+#  - colon range: "1:5:2" (start:stop:step)
+def _parse_range(s: str):
+    s = s.strip()
+    if ':' in s:
+        parts = [int(p) for p in s.split(':')]
+        if len(parts) == 2:
+            start, stop = parts[0], parts[1]
+            step = 1
+        else:
+            start, stop, step = parts[0], parts[1], parts[2]
+    elif '-' in s:
+        start_s, stop_s = s.split('-')
+        start, stop, step = int(start_s), int(stop_s), 1
+    else:
+        start = stop = int(s)
+        step = 1
+    return list(range(start, stop + 1, step))
+
+rounds_input = input("# of building rounds? (single or start:stop:step or start-stop) ")
+rounds_list = _parse_range(rounds_input)
+
+nextTe = float(input("Next TE optioanl? "))
+
+maxTime_input = input("Max build time? (single or start:stop:step or start-stop) ")
+maxTime_list = _parse_range(maxTime_input)
 
 # mx_off = [2400, 28800]
 # mxh_off = [172800, 345600]
@@ -19,6 +48,8 @@ rounds = 3
 #     mx_off.append(int(input("Max offline (in seconds) for 1 research (3600 recommended) round "+str(k)+":")))
 #     mxh_off.append(int(input("Max offline (in seconds) for 1 hab/vehicle (86400 recommended) round "+str(k)+":")))
 #     mxv_off.append(int(input("Max offline (in seconds) for 1 vehicle (86400 recommended) round "+str(k)+":")))
+
+timeTaken = 0
 
 c_multi = 6
 te_multii = int(input("# of TE: "))
@@ -84,23 +115,23 @@ class Farm:
         ind = self.house.index(reg)
         self.house[ind] += 1
         match reg:
-            case 2: farm.pop += 500
-            case 3: farm.pop += 1000
-            case 4: farm.pop += 3000
-            case 5: farm.pop += 5000
-            case 6: farm.pop += 10000
-            case 7: farm.pop += 30000
-            case 8: farm.pop += 50000
-            case 9: farm.pop += 100000
-            case 10: farm.pop += 300000
-            case 11: farm.pop += 500000
-            case 12: farm.pop += 1000000
-            case 13: farm.pop += 3000000
-            case 14: farm.pop += 5000000
-            case 15: farm.pop += 15000000
-            case 16: farm.pop += 25000000
-            case 17: farm.pop += 50000000
-            case 18: farm.pop += 500000000
+            case 2: self.pop += 500
+            case 3: self.pop += 1000
+            case 4: self.pop += 3000
+            case 5: self.pop += 5000
+            case 6: self.pop += 10000
+            case 7: self.pop += 30000
+            case 8: self.pop += 50000
+            case 9: self.pop += 100000
+            case 10: self.pop += 300000
+            case 11: self.pop += 500000
+            case 12: self.pop += 1000000
+            case 13: self.pop += 3000000
+            case 14: self.pop += 5000000
+            case 15: self.pop += 15000000
+            case 16: self.pop += 25000000
+            case 17: self.pop += 50000000
+            case 18: self.pop += 500000000
     def incrVehicle(self):
         self.vehicle_count += 1
     def incrCars(self):
@@ -131,9 +162,11 @@ class Farm:
         ship += hyperloop*self.cars*50000000
         return ship * 2.5/60 * 1.1025
     
-name = str(te_multii)+" - "+str(te_max)+' - '+str(step)+str(int(a_multi))+" new"+'.txt'
-    
-with open(name, "w") as f:
+def run_config(rounds_val: int, maxTime_val: int):
+    """Run the simulation for one (rounds, maxTime) combination and return (timeTaken, output_string, filename)."""
+    global timeTaken
+    timeTaken = 0
+    f = io.StringIO()
     f.write("Artifact Multiplier: "+str(a_multi)+'\n')
     f.write("Research discount (T4C = 50): "+str(cube)+'\n')
     # for l in range(rounds):
@@ -174,6 +207,7 @@ with open(name, "w") as f:
             return cash_multi * min(elr_multi, ship_multi) * 1.05 * 2
 
         def research_sim(remaining_seconds):
+            global timeTaken
             """Consume from remaining_seconds while purchasing researches. Returns remaining_seconds."""
             seconds = 0
             # fast-forward to the next research purchase instead of iterating every second
@@ -197,6 +231,7 @@ with open(name, "w") as f:
                 # advance time by delta and buy
                 farm.cash += income * delta
                 remaining_seconds -= delta
+                timeTaken += delta
                 # buy as many researches as affordable
                 while ar_costs and farm.cash > ar_costs[0] * 1/cube:
                     farm.cash -= ar_costs[0] * 1/cube
@@ -271,6 +306,7 @@ with open(name, "w") as f:
                     # after a purchase, continue buying if affordable; time remains at 0 between immediate buys
             return remaining_seconds
         def house_sim(remaining_seconds):
+            global timeTaken
             house = [6.92, 197.00, 467.00, 816.00, 4134.00, 6649.00, 10016.00, 14425.00, 61076.00, 127276.00, 238583.00,
                     415193.00,
                     1377000.00, 2627000.00, 4637000.00, 7704000.00, 26944000.00, 54319000.00, 100061000.00, 172278000.00,
@@ -308,6 +344,7 @@ with open(name, "w") as f:
                     break
                 farm.cash += income * delta
                 remaining_seconds -= delta
+                timeTaken += delta
                 try:
                     while house and farm.cash > house[0]:
                         farm.cash -= house[0]
@@ -318,6 +355,7 @@ with open(name, "w") as f:
                     return remaining_seconds
             return remaining_seconds
         def vehicle_sim(remaining_seconds):
+            global timeTaken
             local_vehicle = copy.deepcopy(vehicles)
             seconds = 0
             buy_list = []
@@ -344,6 +382,7 @@ with open(name, "w") as f:
                     break
                 farm.cash += income * delta
                 remaining_seconds -= delta
+                timeTaken += delta
                 try:
                     while buy_list and farm.cash > buy_list[0]:
                         farm.cash -= buy_list[0]
@@ -462,14 +501,15 @@ with open(name, "w") as f:
         f.write("----------------------------------------------------------------------"+'\n\n')
 
         # total seconds budget for purchases (uncapped per-purchase but capped overall)
-        total_seconds_budget = 610000
-        for j in range(rounds-1):
+        total_seconds_budget = maxTime_val
+        for j in range(rounds_val-1):
             # run each preliminary round consuming from the same total budget
             loop(total_seconds_budget)
 
         elr, ship = loop(total_seconds_budget)
         ship *= 1.5
         elr *= 1.35
+        elr *= 1.25
 
         stones = []
 
@@ -490,6 +530,14 @@ with open(name, "w") as f:
                 ship *= 1.05
 
         cap = min(ship, elr)
+
+        # `cap` is in units per hour, so nextTe/cap gives hours.
+        # `timeTaken` is measured in seconds elsewhere in the script, so convert hours -> seconds.
+        if cap > 0:
+            timeTaken += nextTe / cap * 3600
+        else:
+            # avoid division by zero; if cap is zero we won't advance time here
+            timeTaken += 0
 
         def oom_calc(val):
                 oom = round((len(f'{val:.0f}') - 2) / 3)
@@ -534,9 +582,30 @@ with open(name, "w") as f:
                 temp = round(val / 10 ** (oom * 3), 3)
                 return str(temp) + eb
         
-        stoneCounter = Counter(stones)
-        formatted = ', '.join(f"{key}: {value}" for key, value in stoneCounter.items())
+        # stoneCounter = Counter(stones)
+        # formatted = ', '.join(f"{key}: {value}" for key, value in stoneCounter.items())
 
         f.write("chatgpt look at this number: "+str(oom_calc(cap))+" per hour"+'\n\n')
-        f.write(str(oom_calc(elr))+" laying, shipping: "+str(oom_calc(ship))+'\n')
-        f.write(formatted+'\n\n')
+        f.write(str(oom_calc(elr))+" laying, shipping: "+str(oom_calc(ship))+'\n\n')
+        # f.write(formatted+'\n\n')
+        f.write("Time Taken: "+str((timeTaken//86400))+"d "+str((timeTaken%86400) // 3600)+"h "+str((timeTaken%3600)//60)+"m"+'\n\n')
+
+    # filename includes rounds and maxTime to disambiguate
+    filename = str(te_multii)+" - "+str(te_max)+' - '+str(step)+" - "+str(rounds_val)+" - "+str(maxTime_val)+" - "+str(int(a_multi))+" new"+'.txt'
+    return timeTaken, f.getvalue(), filename
+
+# iterate over all combinations and keep the run with lowest timeTaken
+best_time = None
+best_output = None
+best_filename = None
+for rounds_val in rounds_list:
+    for maxTime_val in maxTime_list:
+        t, out, fname = run_config(rounds_val, maxTime_val)
+        if best_time is None or t < best_time:
+            best_time = t
+            best_output = out
+            best_filename = fname
+
+if best_output is not None:
+    with open(best_filename, 'w') as f:
+        f.write(best_output)
